@@ -6,8 +6,9 @@ const cors = require("cors")
 const { userRouter } = require("./Routers/UserRouter")
 const { taskRoutes } = require("./Routers/TaskRouter")
 const app = express()
-app.use(express.json())
 app.use(cors())
+app.use(express.json())
+
 app.use("/users",userRouter)
 app.use("/tasks",taskRoutes)
 
