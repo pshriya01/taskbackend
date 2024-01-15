@@ -5,6 +5,7 @@ const saltRounds = parseInt(process.env.saltrounds) || 10;
 const bcrypt = require('bcrypt')
 const jwt = require("jsonwebtoken");
 const { BlacklistModel } = require("../Models/Blacklist");
+const { auth } = require("../Middleware/auth.middleware");
 const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res) => {
@@ -12,7 +13,6 @@ userRouter.post("/register", async (req, res) => {
   const { name, email, username, password } = req.body;
 
   try {
-    
     if (!name || !email || !username || !password) {
       res.status(200).send({ message: "Input fields are required!" });
     } else {
@@ -60,7 +60,7 @@ userRouter.post("/login",async (req, res) => {
                 const passwordMatch = await bcrypt.compare(password, user.password);
     
                 if (passwordMatch) {
-                    const token = jwt.sign({userId:user._id,username:user.username}, process.env.SecretKey,{ expiresIn: 7*60 });
+                    const token = jwt.sign({userId:user._id}, process.env.SecretKey,{ expiresIn: 7*60 });
                     res.status(200).send({ message: "Login successful!", token , user });
                 } else {
                     res.status(200).send({ message: "Incorrect password!" });
@@ -75,7 +75,7 @@ userRouter.post("/login",async (req, res) => {
     } 
 })
 
-userRouter.patch('/update/:userID', async (req, res) => {
+userRouter.patch('/update/:userID',auth, async (req, res) => {
     try {
       const userID = req.params.userID;
       const { name, username, email, password } = req.body;

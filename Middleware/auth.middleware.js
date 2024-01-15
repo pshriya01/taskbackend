@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
             jwt.verify(token, process.env.SecretKey, (err, decoded) => {
                 if (decoded) {
                     req.body.userId = decoded.userId;
-                    req.body.username = decoded.username;
+                    // req.body.username = decoded.username;
                     next();
                 } else {
                     res.status(401).json({ message: "Invalid token. Please login again." });

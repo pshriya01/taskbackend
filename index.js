@@ -1,15 +1,14 @@
 const express = require("express")
 require("dotenv").config()
+const app = express()
 const Port = process.env.PORT || 8000
 // const connection = require('./Config/db')
 const mongoose = require('mongoose')
 const cors = require("cors")
 const { userRouter } = require("./Routers/UserRouter")
 const { taskRoutes } = require("./Routers/TaskRouter")
-const app = express()
 app.use(cors())
 app.use(express.json())
-
 app.use("/users",userRouter)
 app.use("/tasks",taskRoutes)
 
@@ -19,6 +18,7 @@ app.get("/",(req,res)=>{
 })
 
 const connection = mongoose.connect(process.env.mongoURL)
+
 app.listen(Port,async()=>{
     try{
         await connection
