@@ -1,7 +1,8 @@
 const express = require("express")
 require("dotenv").config()
 const Port = process.env.PORT || 8000
-const connection = require('./Config/db')
+// const connection = require('./Config/db')
+const mongoose = require('mongoose')
 const cors = require("cors")
 const { userRouter } = require("./Routers/UserRouter")
 const { taskRoutes } = require("./Routers/TaskRouter")
@@ -17,7 +18,7 @@ app.get("/",(req,res)=>{
     res.status(200).send({message:"Welcome to the backend of Task Management App"})
 })
 
-
+const connection = mongoose.connect(process.env.mongoURL)
 app.listen(Port,async()=>{
     try{
         await connection
